@@ -6,19 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace Music.Controllers;
 
 //[ApiVersion("1", Deprecated = false)]
-[Route("[controller]")]
+//[Route("[controller]")]
 
-public class MusicController : BaseController
+public class MusicController : ControllerBase
 {
     [HttpGet]
-    public IActionResult GetLiatMusic()
+    public IActionResult GetListMusic()
     {
         return Ok();
     }
     [HttpGet]
     public IActionResult GetMusic(string id)
     {
-        return Ok(new { id });
+        return Ok();
     }
+
 
 }
