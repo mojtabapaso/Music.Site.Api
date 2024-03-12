@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Music.Domain.Entities;
 using Music.Domain.Interface;
 using Music.Infrastructure.Data.Context;
 
@@ -12,7 +13,7 @@ public class MusicRepository : IMusicRepository
     {
         this.dbContext = dbContext;
     }
-    public IEnumerable<Domain.Entities.Music> GetMusices()
+    public IEnumerable<MusicEntity> GetMusices()
     {
         return dbContext.Musices;
     }
