@@ -1,24 +1,33 @@
-﻿//using ACSystem.Api.Controllers;
-using Api.Controllers;
+﻿using Api.Controllers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Music.Application.Interface;
 
 namespace Music.Controllers;
 
-//[ApiVersion("1", Deprecated = false)]
-//[Route("[controller]")]
-
-public class MusicController : ControllerBase
+[ApiVersion("1", Deprecated = false)]
+public class MusicController : BaseController
 {
-    [HttpGet]
-    public IActionResult GetListMusic()
+    private readonly IMusicServices musicServices;
+
+    public MusicController(IMusicServices musicServices)
     {
-        return Ok();
+        this.musicServices = musicServices;
     }
     [HttpGet]
-    public IActionResult GetMusic(string id)
+    public async Task<IActionResult> GetListMusic()
     {
-        return Ok();
+        var musics = await musicServices.GetAllAsync();
+        return Ok(musics);
+    }
+    [HttpGet("{id}")]
+    [ResponseCache(Duration =60)]
+    public async Task <IActionResult> GetMusic([FromBody] string id)
+    {
+        var music = await musicServices.FindByIdAsync(id);
+        return new ObjectResult(music);
+        //return Ok();
     }
 
 
