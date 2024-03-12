@@ -9,9 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{763544FD-657
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Music.Domain", "Music.Entity\Music.Domain.csproj", "{7C92F6DD-CB0A-45B7-AC41-DD592C23CE94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music.Application", "Music.Application\Music.Application.csproj", "{F998CDA6-CB7F-4281-A4E1-45F3ADE343BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Music.Application", "Music.Application\Music.Application.csproj", "{F998CDA6-CB7F-4281-A4E1-45F3ADE343BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music.Infrastructure", "Music.Infrastructure\Music.Infrastructure.csproj", "{5E8AADA8-1829-4D2C-BED5-B322409D5917}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Music.Infrastructure", "Music.Infrastructure\Music.Infrastructure.csproj", "{5E8AADA8-1829-4D2C-BED5-B322409D5917}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8B95E398-858D-4971-8807-D7EA9AEF509D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music.WebAPI.Tests", "Music.WebAPI.Tests\Music.WebAPI.Tests.csproj", "{65A1D362-D3E0-413C-A266-881BAAF154D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,10 @@ Global
 		{5E8AADA8-1829-4D2C-BED5-B322409D5917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E8AADA8-1829-4D2C-BED5-B322409D5917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E8AADA8-1829-4D2C-BED5-B322409D5917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65A1D362-D3E0-413C-A266-881BAAF154D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A1D362-D3E0-413C-A266-881BAAF154D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65A1D362-D3E0-413C-A266-881BAAF154D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A1D362-D3E0-413C-A266-881BAAF154D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{7C92F6DD-CB0A-45B7-AC41-DD592C23CE94} = {763544FD-657E-4475-BABE-8F6B56E30429}
 		{F998CDA6-CB7F-4281-A4E1-45F3ADE343BE} = {763544FD-657E-4475-BABE-8F6B56E30429}
 		{5E8AADA8-1829-4D2C-BED5-B322409D5917} = {763544FD-657E-4475-BABE-8F6B56E30429}
+		{65A1D362-D3E0-413C-A266-881BAAF154D2} = {8B95E398-858D-4971-8807-D7EA9AEF509D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B439FB7F-CD83-4A8E-B92C-6D0C1396C4DE}
