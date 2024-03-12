@@ -1,18 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using Music.Infrastructure.Data.Context;
+using Music.Infrastructure.IocConfig;
+
 var builder = WebApplication.CreateBuilder(args);
+var Services = builder.Services;
 
-// Add services to the container.
+Services.AddDbContext<MusicDBContext>(option =>
+{
+    var ee = builder.Configuration.GetConnectionString("MusicDBConecnection");
+    option.UseSqlite(ee);
 
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//	.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    });
+Services.AddControllers();
+Services.AddEndpointsApiExplorer();
+Services.AddSwaggerGen();
+Services.AddResponseCaching();
+Services.AddMemoryCache();
+Services.AddEntityServies();
+Services.AddIdentityServies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 
 if (app.Environment.IsDevelopment())
 {
@@ -23,9 +31,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.UseResponseCaching();
+app.UseCors("EnableCors");
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 //app.UseApiVersioning();
