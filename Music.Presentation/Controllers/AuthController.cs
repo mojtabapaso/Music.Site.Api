@@ -2,65 +2,74 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Music.Application.DataTransferObjects;
-using Music.Application.Utilities;
+using Music.Application.Interface;
 using Music.Domain.Entities;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Music.WebAPI.Controllers;
 
-//[ApiController]
-//[Route("api/[controller]")]
 public class AuthController : BaseController
 {
 	private readonly IConfiguration configuration;
 	private readonly UserManager<ApplicationUser> userManager;
 	private readonly IPasswordHasher<ApplicationUser> passwordHasher;
+	private readonly IJWTManager jWTManager;
+	private readonly IUserRefreshTokensServices userRefreshTokensServices;
 
-	public AuthController(IConfiguration configuration, UserManager<ApplicationUser> userManager , IPasswordHasher<ApplicationUser> passwordHasher)
+	public AuthController(IConfiguration configuration, UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher, IJWTManager jWTManager, IUserRefreshTokensServices userRefreshTokensServices)
 	{
 		this.configuration = configuration;
 		this.userManager = userManager;
 		this.passwordHasher = passwordHasher;
+		this.jWTManager = jWTManager;
+		this.userRefreshTokensServices = userRefreshTokensServices;
 	}
 
 	[HttpPost("Register")]
-	public async Task<IActionResult> Register([FromForm] RegisterDTO register)
+	public async Task<IActionResult> Register([FromForm] RegisterDTO registerDTO)
 	{
-		var user = await userManager.FindByNameAsync(register.UserName);
-		if (user != null)
+		var existingUser = await userManager.FindByNameAsync(registerDTO.UserName);
+		if (existingUser != null)
 		{
 			return Conflict();
 		}
-		string password = passwordHasher.HashPassword(user, register.Password);
-		var appUser = new ApplicationUser
+
+		var newUser = new ApplicationUser
 		{
 			Id = Guid.NewGuid().ToString(),
-			UserName = register.UserName,
-			PasswordHash = password,
+			UserName = registerDTO.UserName,
 		};
-		await userManager.CreateAsync(appUser);
-		
-		var authClaims = new List<Claim>
+
+		var createUserResult = await userManager.CreateAsync(newUser, registerDTO.Password);
+		if (!createUserResult.Succeeded)
 		{
-			new Claim(ClaimTypes.Name, register.UserName),
-			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-		};
-		foreach (var claim in authClaims)
-		{
-			await userManager.AddClaimAsync(appUser, claim);
+			var errors = createUserResult.Errors.Select(error => error.Description);
+			return BadRequest(errors);
 		}
-		var newAccessToken = JWTGenerator.CreateToken(authClaims);
-		var tokennewRefreshToken = JWTGenerator.GenerateRefreshToken();
 
-		return Ok(new
+		var userWithClaims = await userManager.FindByNameAsync(registerDTO.UserName);
+		await userManager.AddClaimAsync(userWithClaims, new Claim("SpecialAccess", "true", ClaimValueTypes.Boolean));
+
+
+		string accessToken = await jWTManager.GenerateAccessTokenAsync(registerDTO.UserName);
+		string refreshToken = await jWTManager.GenerateRefreshTokenAsync(registerDTO.UserName);
+		var tokens = new Tokens
 		{
-			AccessToken = newAccessToken,
-			RefreshToken = tokennewRefreshToken,
-		});
+			AccessToken = accessToken,
+			RefreshToken = refreshToken
+		};
+
+		var userRefreshTokens = new UserRefreshTokens
+		{
+			RefreshToken = tokens.RefreshToken,
+			IsActive = true,
+			UserName = registerDTO.UserName
+		};
+
+		await userRefreshTokensServices.AddAsync(userRefreshTokens);
+
+		return Ok(tokens);
 	}
-
-
 	[HttpPost("Login")]
 	public async Task<IActionResult> Login([FromForm] LoginDTO login)
 	{
@@ -74,25 +83,13 @@ public class AuthController : BaseController
 		{
 			return BadRequest("Password is invalid");
 		}
-		var userRoles = await userManager.GetRolesAsync(user);
-
-		var authClaims = new List<Claim>
-				{
-					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-				};
-		foreach (var userRole in userRoles)
+		var accessToken = await jWTManager.GenerateAccessTokenAsync(login.UserName);
+		var refreshToken = await jWTManager.GenerateRefreshTokenAsync(login.UserName);
+		var token = new Tokens()
 		{
-			authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-		}
-
-		var newAccessToken = JWTGenerator.CreateToken(authClaims);
-		var tokennewRefreshToken = JWTGenerator.GenerateRefreshToken();
-
-		return Ok(new
-		{
-			AccessToken = newAccessToken,
-			RefreshToken = tokennewRefreshToken,
-		});
+			AccessToken = accessToken,
+			RefreshToken = refreshToken
+		};
+		return Ok(token);
 	}
 }
