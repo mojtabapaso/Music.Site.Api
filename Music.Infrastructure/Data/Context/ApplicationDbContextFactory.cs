@@ -15,7 +15,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<MusicDBCo
         IConfigurationRoot root = builder.Build();
         string? sqlConnectionString = root["ConnectionStrings:MusicDBConecnection"];
         var optionsBuilder = new DbContextOptionsBuilder<MusicDBContext>();
-        optionsBuilder.UseSqlite(sqlConnectionString);
+        optionsBuilder.UseSqlServer(sqlConnectionString);
         return new MusicDBContext(optionsBuilder.Options);
     }
 }
