@@ -6,5 +6,6 @@ namespace Music.Domain.Entities;
 public class TypeMusic : BaseEntity
 {
     public string Name { get; set; }
+
     public ICollection<MusicEntity> Musics { get; set; } = new List<MusicEntity>();
 }
