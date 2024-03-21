@@ -7,13 +7,19 @@ namespace Music.Infrastructure.Data.Context;
 
 public class MusicDBContext : IdentityDbContext<ApplicationUser,IdentityRole,string>
 {
-	public MusicDBContext(DbContextOptions options) : base(options)
+	public MusicDBContext()
+	{
+	}
+
+	public MusicDBContext(DbContextOptions<MusicDBContext> options) : base(options)
 	{
 	}
 	public DbSet<ApplicationUser> Users { get; set; }
-	public DbSet<MusicEntity> Musices { get; set; }
-	public DbSet<Singer> Singeres { get; set; }
-
+	public DbSet<MusicEntity> Musics { get; set; }
+	public DbSet<Singer> Singers { get; set; }
+	public DbSet<Wallet> Wallets { get; set; }
+	public DbSet<Subscription> Subscriptions { get; set; }
+	public DbSet<UserRefreshTokens> UserRefreshToken { get; set; }
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
