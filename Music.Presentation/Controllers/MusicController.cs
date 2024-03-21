@@ -14,12 +14,14 @@ public class MusicController : BaseController
 	{
 		this.musicServices = musicServices;
 	}
+	[Authorize("PremiumUser", AuthenticationSchemes = "Bearer")]
 	[HttpGet("GetAll")]
 	public async Task<IActionResult> GetListMusic()
 	{
 		var musics = await musicServices.GetAllAsync();
 		return Ok(musics);
 	}
+	[Authorize("PremiumUser", AuthenticationSchemes = "Bearer")]
 	[HttpGet("{id}")]
 	[ResponseCache(Duration = 60)]
 	public async Task<IActionResult> GetMusic([FromBody] string id)
