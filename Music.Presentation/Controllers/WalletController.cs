@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Music.Application.Interface;
+using Music.Application.Interface.Entity;
 using Music.Domain.Entities;
 
 namespace Music.Presentation.Controllers;
@@ -17,7 +17,7 @@ public class WalletController : BaseController
 		this.walletServices = walletServices;
 		this.userManager = userManager;
 	}
-
+	[HttpPost("Charg")]
 	[Authorize(AuthenticationSchemes = "Bearer")]
 	public async Task<IActionResult> ChargingWallet(UInt16 amount)
 	{
