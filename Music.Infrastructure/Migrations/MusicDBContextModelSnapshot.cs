@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Music.Infrastructure.Data.Context;
+using Music.Infrastructure.Context;
 
 #nullable disable
 
@@ -233,7 +233,6 @@ namespace Music.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MusicId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -244,7 +243,7 @@ namespace Music.Infrastructure.Migrations
 
                     b.HasIndex("MusicId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Music.Domain.Entities.MusicEntity", b =>
@@ -457,9 +456,7 @@ namespace Music.Infrastructure.Migrations
                 {
                     b.HasOne("Music.Domain.Entities.MusicEntity", "Music")
                         .WithMany("MusicCategories")
-                        .HasForeignKey("MusicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MusicId");
 
                     b.Navigation("Music");
                 });

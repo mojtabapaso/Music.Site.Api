@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Music.Infrastructure.Context;
 
-
 #nullable disable
 
 namespace Music.Infrastructure.Migrations
 {
     [DbContext(typeof(MusicDBContext))]
-    [Migration("20240315193434_add model Subscription")]
-    partial class addmodelSubscription
+    [Migration("20240325113218_delete MusicId from Model Category migration again")]
+    partial class deleteMusicIdfromModelCategorymigrationagain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,7 +236,6 @@ namespace Music.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MusicId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -248,7 +246,7 @@ namespace Music.Infrastructure.Migrations
 
                     b.HasIndex("MusicId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Music.Domain.Entities.MusicEntity", b =>
@@ -265,10 +263,17 @@ namespace Music.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("NeedSubscription")
+                        .HasColumnType("bit");
+
                     b.Property<string>("SingerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Subtitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeMusicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -313,9 +318,6 @@ namespace Music.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Update")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -339,6 +341,52 @@ namespace Music.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TypeMusic");
+                });
+
+            modelBuilder.Entity("Music.Domain.Entities.UserRefreshTokens", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRefreshToken");
+                });
+
+            modelBuilder.Entity("Music.Domain.Entities.Wallet", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("MusicEntityTypeMusic", b =>
@@ -411,9 +459,7 @@ namespace Music.Infrastructure.Migrations
                 {
                     b.HasOne("Music.Domain.Entities.MusicEntity", "Music")
                         .WithMany("MusicCategories")
-                        .HasForeignKey("MusicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MusicId");
 
                     b.Navigation("Music");
                 });
@@ -432,6 +478,17 @@ namespace Music.Infrastructure.Migrations
                     b.HasOne("Music.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Music.Domain.Entities.Wallet", b =>
+                {
+                    b.HasOne("Music.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
