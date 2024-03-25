@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Music.Infrastructure.Data.Context;
+namespace Music.Infrastructure.Context;
 
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<MusicDBContext>
 {
