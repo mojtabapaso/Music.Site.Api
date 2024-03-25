@@ -2,7 +2,7 @@
 
 namespace Music.Application.DataTransferObjects;
 
-public class LoginDTO
+public class LoginDTO:BaseDTO
 {
 	[Required]
 	public string UserName { get; set; }
