@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Music.Application.DataTransferObjects;
-using Music.Application.Interface;
+using Music.Application.Interface.Logic;
 using Music.Domain.Entities;
 using System.Security.Claims;
 
@@ -53,7 +53,7 @@ public class AuthController : BaseController
 
 		string accessToken = await jWTManager.GenerateAccessTokenAsync(registerDTO.UserName);
 		string refreshToken = await jWTManager.GenerateRefreshTokenAsync(registerDTO.UserName);
-		var tokens = new Tokens
+		var tokens = new TokenDTO
 		{
 			AccessToken = accessToken,
 			RefreshToken = refreshToken
@@ -85,7 +85,7 @@ public class AuthController : BaseController
 		}
 		var accessToken = await jWTManager.GenerateAccessTokenAsync(login.UserName);
 		var refreshToken = await jWTManager.GenerateRefreshTokenAsync(login.UserName);
-		var token = new Tokens()
+		var token = new TokenDTO
 		{
 			AccessToken = accessToken,
 			RefreshToken = refreshToken
