@@ -7,7 +7,9 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Music.Domain.Entities;
-using Music.Infrastructure.Data.Context;
+using Music.Infrastructure.Context;
+using Music.Application.Interface.Logic;
+using Music.Application.Services;
 namespace Music.Infrastructure.IocConfig;
 
 public static class IdentityServices
@@ -18,10 +20,12 @@ public static class IdentityServices
 		.AddUserManager<UserManager<ApplicationUser>>()
 		.AddRoleManager<RoleManager<IdentityRole>>().AddEntityFrameworkStores<MusicDBContext>();
 
+		Services.AddScoped<IJWTManager, JWTManager>();
+
 		var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-		string jwtKey = config["JWT:Secret"];
-		string Issuer = config["JWT:ValidIssuer"];
+		string jwtKey = config["Jwt:SecretKey"];
+		string Issuer = config["Jwt:ValidIssuer"];
 
 
 		Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -34,7 +38,8 @@ public static class IdentityServices
 				ValidateLifetime = true,
 				ValidateIssuerSigningKey = true,
 				ValidIssuer = Issuer,
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+
 			};
 		});
 
@@ -47,6 +52,16 @@ public static class IdentityServices
 				.AllowAnyMethod()
 				.Build();
 
+
+			});
+		});
+		Services.AddAuthorization(option =>
+		{
+			// PremiumUser  SpecialAccess
+
+			option.AddPolicy("PremiumUser", policy =>
+			{
+				policy.RequireClaim("SpecialAccess");
 			});
 		});
 		return Services;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Music.Infrastructure.Data.Context;
+using Music.Infrastructure.Context;
 
 namespace Music.Infrastructure.IocConfig;
 

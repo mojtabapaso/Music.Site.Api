@@ -1,17 +1,17 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using HangfireBasicAuthenticationFilter;
-using Music.Application.Interface;
+using Music.Application.Interface.Entity;
 
 namespace Music.Infrastructure.IocConfig;
 
 public static class HangfireApp
 {
-	public  static IApplicationBuilder AddHangfireApp(this IApplicationBuilder app)
+	public static IApplicationBuilder AddHangfireApp(this IApplicationBuilder app)
 	{
 		app.UseHangfireDashboard();
 		RecurringJob.AddOrUpdate<ISubscriptionServices>(cornJob => cornJob.SubscriptionExpirationCheckerAsync(), "30 22 * * *");
-	
+
 		// equivalent to 3 nights Tehran time
 
 		app.UseHangfireDashboard("/hangfire", new DashboardOptions
