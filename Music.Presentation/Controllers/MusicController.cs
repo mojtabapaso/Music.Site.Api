@@ -72,7 +72,7 @@ public class MusicController : BaseController
 		};
 		return Ok(result);
 	}
-	[HttpGet("Singer/{id}")]//GetMusicListBySinger
+	[HttpGet("Singer/{id}")]
 	public async Task<IActionResult> GetMusicListBySinger(string singerId)
 	{
 		var musics = await musicServices.GetMusicListBySingerAsync(singerId);
