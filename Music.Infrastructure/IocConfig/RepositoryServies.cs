@@ -14,6 +14,7 @@ public static class RepositoryServies
 		Services.AddScoped<IUserRefreshTokensServices, UserRefreshTokensServices>();
 		Services.AddScoped<ICategoryServices, CategoryServices>();
 		Services.AddScoped<IWalletServices, WalletServices>();
+		Services.AddScoped<ISingerServices, SingerServices>();
 		return Services;
     }
 }
