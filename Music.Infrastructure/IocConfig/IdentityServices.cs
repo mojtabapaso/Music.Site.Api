@@ -20,8 +20,6 @@ public static class IdentityServices
 		.AddUserManager<UserManager<ApplicationUser>>()
 		.AddRoleManager<RoleManager<IdentityRole>>().AddEntityFrameworkStores<MusicDBContext>();
 
-		Services.AddScoped<IJWTManager, JWTManager>();
-
 		var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
 		string jwtKey = config["Jwt:SecretKey"];
