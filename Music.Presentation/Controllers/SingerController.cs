@@ -3,7 +3,6 @@ using Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Music.Application.Interface.Entity;
 using Music.Application.DataTransferObjects;
-using Music.Domain.Entities;
 
 namespace Music.Presentation.Controllers;
 
@@ -39,5 +38,4 @@ public class SingerController : BaseController
 		var singerDto = mapper.Map<SingerDTO>(singer);
 		return Ok(singerDto);
 	}
-
 }

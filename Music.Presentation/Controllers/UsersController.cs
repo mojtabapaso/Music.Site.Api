@@ -1,4 +1,5 @@
 ﻿using Api.Controllers;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,11 @@ namespace Music.Presentation.Controllers;
 public class UsersController : BaseController
 {
 	private readonly UserManager<ApplicationUser> userManager;
+	private readonly IMapper mapper;
 
-	public UsersController(UserManager<ApplicationUser> userManager)
-    {
+	public UsersController(UserManager<ApplicationUser> userManager, IMapper mapper)
+	{
+		this.mapper = mapper;
 		this.userManager = userManager;
 	}
 	[HttpGet("{id}")]
@@ -25,4 +28,5 @@ public class UsersController : BaseController
 		}
 		return Ok(user);
 	}
+
 }
