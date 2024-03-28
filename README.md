@@ -1,9 +1,9 @@
 # Project Name
 
-ProjectName.API
+Music.API
 
 ## Description
-
+Clean Architecture
 This project is an API for a music site developed using .NET 8. It allows users to authenticate using JSON Web Tokens (JWT) and provides features for regular and subscribed users. The API allows searching for music based on singer name, genre, and music type.
 
 ## Features
