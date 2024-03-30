@@ -7,7 +7,7 @@ namespace Music.Application.Services;
 public class PaymentServisec : IPaymentServisec
 {
 	private static readonly HttpClient client = new HttpClient();
-	public async Task<HttpResponseMessage> PaymentAsync(string amount, string CallbackURL, string phoneNumber, string description)
+	public async Task<HttpResponseMessage> PaymentAsync(string amount, string CallbackURL,  string description, string phoneNumber = null)
 	{
 		var _url = "https://www.zarinpal.com/pg/rest/WebGate/PaymentRequest.json";
 		var _values = new Dictionary<string, string>
