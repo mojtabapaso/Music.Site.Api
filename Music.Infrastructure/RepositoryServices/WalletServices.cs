@@ -12,7 +12,7 @@ public class WalletServices : GenericServices<Wallet>, IWalletServices
 	{
 		this.context = context;
 	}
-	public async Task<Wallet> GetUserWalletAsync(string userId)
+	public async Task<Wallet> GetWalletByUserIdAsync(string userId)
 	{
 		return  await context.Wallets.Where(w=>w.User.Id == userId).FirstOrDefaultAsync();
 	}
