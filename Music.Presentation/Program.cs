@@ -9,10 +9,12 @@ Services.AddSwaggerGen();
 Services.AddRepositoryServies();
 Services.AddResponseCaching();
 Services.AddMemoryCache();
+Services.AddAutoMapperServies();
 // Custome Service
 Services.AddDbContextServies();
 Services.AddIdentityServies();
 Services.AddHangfireServies();
+Services.AddLogicServies();
 
 var app = builder.Build();
 
