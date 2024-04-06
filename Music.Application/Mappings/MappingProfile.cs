@@ -2,15 +2,15 @@
 using Music.Application.DataTransferObjects;
 using Music.Domain.Entities;
 
-namespace Shop.Mappings;
+namespace Music.Application.Mappings;
 
 public class MappingProfile : Profile
 {
-	public MappingProfile()
-	{
-		CreateMap<MusicEntity, MusicDTO>();
-		CreateMap<Category, CategoryDTO>();
-		CreateMap<Singer, SingerDTO>();
-	}
-
+    public MappingProfile()
+    {
+        CreateMap<Singer, SingerDTO>();
+        CreateMap<MusicEntity, MusicDTO>();
+        CreateMap<Category, CategoryDTO>();
+        CreateMap<Subscription, SubscriptionDTO>();
+    }
 }

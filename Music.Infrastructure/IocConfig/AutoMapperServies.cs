@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shop.Mappings;
+using Music.Application.Mappings;
 
 namespace Music.Infrastructure.IocConfig;
 public static class AutoMapperServies

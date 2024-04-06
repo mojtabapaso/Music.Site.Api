@@ -1,7 +1,9 @@
 ﻿using Api.Controllers;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Music.Application.DataTransferObjects;
 using Music.Application.Interface.Entity;
 using Music.Application.Interface.Logic;
 using Music.Domain.Entities;
@@ -18,13 +20,15 @@ public class SubscriptionController : BaseController
 	private readonly IPaymentServisec paymentServisec;
 	private readonly IWalletServices walletServices;
 	private readonly IConfiguration configuration;
+    private readonly IMapper mapper;
 
-	public SubscriptionController(ISubscriptionServices subscriptionServices,
+    public SubscriptionController(ISubscriptionServices subscriptionServices,
 		UserManager<ApplicationUser> userManager,
 		IUserRefreshTokensServices userRefreshTokensServices,
 		IPaymentServisec paymentServisec,
 		IWalletServices walletServices,
-		IConfiguration configuration
+		IConfiguration configuration,
+		IMapper mapper
 		)
 	{
 		this.subscriptionServices = subscriptionServices;
@@ -33,20 +37,21 @@ public class SubscriptionController : BaseController
 		this.paymentServisec = paymentServisec;
 		this.walletServices = walletServices;
 		this.configuration = configuration;
-	}
+        this.mapper = mapper;
+    }
 	[HttpGet("Get/Subscription")]
 	[Authorize("PremiumUser", AuthenticationSchemes = "Bearer")]
-
 	//for set in profile user
 	public async Task<IActionResult> GetSubscription()
 	{
 		var userId = userManager.GetUserId(User);
 		var subscription = await subscriptionServices.GetSubscriptionByUserIdAsync(userId);
-		if (subscription == null)
+        if (subscription == null)
 		{
 			return NotFound();
 		}
-		return Ok(subscription);
+		var subscriptionDto =  mapper.Map<SubscriptionDTO>(subscription);
+		return Ok(subscriptionDto);
 	}
 
 	[HttpPost("Set/Subscription")]
@@ -70,7 +75,6 @@ public class SubscriptionController : BaseController
 		var statusPayment = await paymentServisec.PaymentAsync(subscriptionPrice, "/");
 		if (statusPayment.IsSuccessStatusCode)
 		{
-
 			DateTime dateTime = DateTime.UtcNow;
 			DateTime dateTimeMonth = DateTime.UtcNow.AddMonths(month);
 			Claim claim = new Claim("IsPremiumUser", "true", ClaimValueTypes.Boolean);
