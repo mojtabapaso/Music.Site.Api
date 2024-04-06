@@ -27,7 +27,7 @@ public class WalletController : BaseController
 			return BadRequest();
 		}
 		var user = await userManager.GetUserAsync(User);
-		var existWallet = await walletServices.GetUserWalletAsync(user.Id);
+		var existWallet = await walletServices.GetWalletByUserIdAsync(user.Id);
 		if (existWallet != null)
 		{
 			existWallet.Amount += amount;

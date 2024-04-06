@@ -1,6 +1,5 @@
 ﻿using Api.Controllers;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Music.Application.DataTransferObjects;
 using Music.Application.Interface.Entity;
@@ -20,8 +19,8 @@ public class CategoryController : BaseController
 	[HttpGet("List")]
 	public async Task<IActionResult> GetListCategory()
 	{
-		var category = await categoryServices.GetAllAsync();
-		var categoryDto = mapper.Map<CategoryDTO>(category);
-		return Ok(categoryDto);
+		var categories = await categoryServices.GetAllAsync();
+		var categoriesDto = mapper.Map<List<CategoryDTO>>(categories);
+		return Ok(categoriesDto);
 	}
 }
