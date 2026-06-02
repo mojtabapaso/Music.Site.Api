@@ -24,7 +24,7 @@ jobs:
     
     - name: Quick test - check if image works
       run: |
-        docker run --rm test-image dotnet --version
+        docker run --rm test-image
         
     - name: Clean up
       run: |
