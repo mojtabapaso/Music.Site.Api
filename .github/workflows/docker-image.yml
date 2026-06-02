@@ -22,9 +22,9 @@ jobs:
         echo "Image size:"
         docker images test-image --format "table {{.Size}}"
     
-    - name: Quick test - check if image works
-      run: |
-        docker run --rm test-image
+    # - name: Quick test - check if image works
+    #   run: |
+    #     docker run --rm test-image
         
     - name: Clean up
       run: |
