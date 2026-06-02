@@ -21,11 +21,22 @@ jobs:
         echo "✅ Docker image built successfully"
         echo "Image size:"
         docker images test-image --format "table {{.Size}}"
-    
-    # - name: Quick test - check if image works
-    #   run: |
-    #     docker run --rm test-image
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.28.0 
+      with:
+        image-ref: 'test-image'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        exit-code: '0'  
+        severity: 'CRITICAL,HIGH'  
+    - name: Upload scan results
+      uses: github/codeql-action/upload-sarif@v3  # نسخه v3 جدیدتر
+      with:
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy-scan'
         
     - name: Clean up
       run: |
         docker rmi test-image
+
