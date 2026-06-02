@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Build Test
 
 on:
   push:
@@ -7,12 +7,25 @@ on:
     branches: [ "master" ]
 
 jobs:
-
-  build:
-
+  build-test:
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile #--tag my-image-name:$(date +%s)
+    
+    - name: Build Docker image
+      id: build
+      run: |
+        docker build . --file Dockerfile --tag test-image
+        
+        echo "✅ Docker image built successfully"
+        echo "Image size:"
+        docker images test-image --format "table {{.Size}}"
+    
+    - name: Quick test - check if image works
+      run: |
+        docker run --rm test-image dotnet --version
+        
+    - name: Clean up
+      run: |
+        docker rmi test-image
