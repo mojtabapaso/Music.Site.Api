@@ -46,8 +46,8 @@ RUN dotnet build "Music.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/bui
 
 # Publish
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Music.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-build
+
+RUN dotnet publish "Music.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/publish # /p:UseAppHost=false --no-build
 
 FROM base AS final
 WORKDIR /app
